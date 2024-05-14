@@ -1,148 +1,110 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmasnaou <cmasnaou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/02/01 18:29:35 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:15:05 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-// void	get_forks(t_data *d, int time, int i)
-// {
-// 	pthread_mutex_lock(&d->fork[i]);
-//     ft_putnbr(get_time() - time);
-//     write(1, " ", 1);
-//     ft_putnbr(i + 1);
-//     write(1, " ", 1);
-//     write(1, "has taken a fork\n", 18);
-
-//     pthread_mutex_lock(&d->fork[(i + 1) % 8]);
-//     ft_putnbr(get_time() - time);
-//     write(1, " ", 1);
-//     ft_putnbr(i + 1);
-//     write(1, " ", 1);
-//     write(1, "has taken a fork\n", 18);
-// }
-
-// void	put_forks(t_data *d, int time, int i)
-// {
-// 	pthread_mutex_unlock(&d->fork[i]);
-// 	pthread_mutex_unlock(&d->fork[(i + 1) % 8]);
-//     ft_putnbr(get_time() - time);
-//     write(1, " ", 1);
-//     ft_putnbr(i + 1);
-//     write(1, " ", 1);
-//     write(1, "is sleeping\n", 13);
-// 	set_usleep(d->tab[3]);
-// }
-
-// void	ft_eat(t_data *d, int time, int i)
-// {
-//     pthread_mutex_t lock;
-// 	get_forks(d, time, i);
-//     pthread_mutex_init(&lock, NULL);
-// 	pthread_mutex_lock(&lock);
-// 	// d->status[i] = 1;//////
-//     ft_putnbr(get_time() - time);
-//     write(1, " ", 1);
-//     ft_putnbr(i + 1);
-//     write(1, " ", 1);
-//     write(1, "is eating\n", 11);
-// 	d->tab[4]--;
-// 	set_usleep(d->tab[2]);
-// 	// d->status[i] = 0;
-// 	pthread_mutex_unlock(&lock);
-// 	put_forks(d, time, i);
-// }
+void free_data(t_data *d)
+{
+	int i = 0;
+	while (i < d->tab[0])
+    {
+        pthread_mutex_unlock(&d->philo[i].fork_l);
+		pthread_mutex_destroy(&d->philo[i].fork_l);
+        i++;
+    }
+} 
 
 
-// void	*monitor(void *data_pointer)
-// {
-// 	t_philo	*philo;
+long get_time()
+{
+    struct timeval t;
 
-// 	philo = (t_philo *) data_pointer;
-// 	pthread_mutex_lock(&philo->data->write);
-// 	printf("data val: %d", philo->data->dead);
-// 	pthread_mutex_unlock(&philo->data->write);
-// 	while (philo->data->dead == 0)
-// 	{
-// 		pthread_mutex_lock(&philo->lock);
-// 		if (philo->data->finished >= philo->data->philo_num)
-// 			philo->data->dead = 1;
-// 		pthread_mutex_unlock(&philo->lock);
-// 	}
-// 	return ((void *)0);
-// }
+    if (gettimeofday(&t, NULL))
+        return (write(2, "error getting time\n", 20), 0);
+    return (t.tv_sec * 1000 + t.tv_usec / 1000);    
+}
 
-// void	*supervisor(void *philo_pointer)
-// {
-// 	t_philo	*philo;
+int time_check(t_philo *p)
+{
+    int status;
+    int i = 0;
 
-// 	philo = (t_philo *) philo_pointer;
-// 	while (philo->data->dead == 0)
-// 	{
-// 		pthread_mutex_lock(&philo->lock);
-// 		if (get_time() >= philo->time_to_die && philo->eating == 0)
-// 			messages(DIED, philo);
-// 		if (philo->eat_cont == philo->data->meals_nb)
-// 		{
-// 			pthread_mutex_lock(&philo->data->lock);
-// 			philo->data->finished++;
-// 			philo->eat_cont++;
-// 			pthread_mutex_unlock(&philo->data->lock);
-// 		}
-// 		pthread_mutex_unlock(&philo->lock);
-// 	}
-// 	return ((void *)0);
-// }
+    while (i < p->data->tab[0])
+    {
+        pthread_mutex_lock(&p->data->time_lock);
+        status = (get_time() - p->data->philo[i].last_meal > p->data->tab[1]);
+        if (status)
+        {
+            // printf("%d time_check: %d\n", p->data->philo[i].id, status);
+            // printf("%d last meal: %ld\n", p->data->philo[i].id, get_time() - p->data->philo[i].last_meal);
+            p->data->is_dead = p->data->philo[i].id;
+            pthread_mutex_unlock(&p->data->time_lock);
+            return (status);
+        }
+        pthread_mutex_unlock(&p->data->time_lock);
+        i++;
+    }
+    return (status);
+}
 
-// void	*routine(void *philo_pointer)
-// {
-// 	t_philo	*philo;
+int set_usleep(t_philo * p, long t)
+{
+    long time;
 
-// 	philo = (t_philo *) philo_pointer;
-// 	philo->time_to_die = philo->data->death_time + get_time();
-// 	if (pthread_create(&philo->t1, NULL, &supervisor, (void *)philo))
-// 		return ((void *)1);
-// 	while (philo->data->dead == 0)
-// 	{
-// 		eat(philo);
-// 		messages(THINKING, philo);
-// 	}
-// 	if (pthread_join(philo->t1, NULL))
-// 		return ((void *)1);
-// 	return ((void *)0);
-// }
+    time = get_time();
+    while (get_time() < time + t)
+    {
+        if (p->data->is_dead)
+            return (1);
+        if (time_check(p))
+            return (p->data->is_dead = p->id, 1);
+        usleep(100);
+    }
+    return (0);
+}
 
-// int	thread_init(t_data *data)
-// {
-// 	int			i;
-// 	pthread_t	t0;
+int set_message(t_philo *p, char *s)
+{
+    t_philo philo;
+    static int i = 0;
+    long time;
 
-// 	i = -1;
-// 	data->start_time = get_time();
-// 	if (data->meals_nb > 0)
-// 	{
-// 		if (pthread_create(&t0, NULL, &monitor, &data->philos[0]))
-// 			return (error(TH_ERR, data));
-// 	}
-// 	while (++i < data->philo_num)
-// 	{
-// 		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
-// 			return (error(TH_ERR, data));
-// 		set_usleep(1);
-// 	}
-// 	i = -1;
-// 	while (++i < data->philo_num)
-// 	{
-// 		if (pthread_join(data->tid[i], NULL))
-// 			return (error(JOIN_ERR, data));
-// 	}
-// 	return (0);
-// }
+    philo = p->data->philo[dead_check(p) - 1];
+    pthread_mutex_lock(&p->data->print_lock);
+    time = get_time() - p->start_time;
+    if (i)
+        return (pthread_mutex_unlock(&p->data->print_lock), 1);
+    if (p->data->tab[4] && p->data->eat_count >= p->data->tab[0] * p->data->tab[4])
+    {
+        i++;
+        pthread_mutex_unlock(&p->data->print_lock);
+        return (1);
+    }
+    if (!dead_check(p) && time_check(p))
+    {
+        (p->data->is_dead = p->id, i++);
+        printf("%-6ld  %-3d  died\n", time, p->data->is_dead);
+        pthread_mutex_unlock(&p->data->print_lock);
+        return (1);
+    }
+    if (dead_check(p))
+    {
+        i++;
+        printf("%-6ld  %-3d  died\n", time, p->data->is_dead);
+        pthread_mutex_unlock(&p->data->print_lock);
+        return (1);
+    }
+    if (!dead_check(p))
+        printf("%-6ld  %-3d  %s\n", time, p->id, s);
+    pthread_mutex_unlock(&p->data->print_lock);
+    return (0);
+}

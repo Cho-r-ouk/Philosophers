@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmasnaou <cmasnaou@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:48 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/02/01 18:31:20 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:21:57 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//fix -0 and malloc = NULL sigfault
 
 #include "philo.h"
 
@@ -78,25 +80,21 @@ int parse(int ac, char **av, t_data *d)
 	k = arg_count(ac, av);
     if (k < 4 || k > 5)
         return (write (2, "Error\n", 6), 1);
-	i = 0;
-	k = -1;
-	d->tab[4] = 0;
+	(i = 0, k = -1, d->tab[4] = 0);
 	while (++i < ac)
 	{
-		split = ft_split(av[i], ' ');
+		(split = ft_split(av[i], ' '), j = -1);
 		if (!split)
 			return (write (2, "Error\n", 6), 1);
-		j = -1;
 		while (split[++j])
 		{
 			d->tab[++k] = ft_atoi(split[j]);
+			if (d->tab[0] == 0)
+				return (0);
 			if (d->tab[k] == 0)
 				return (write (2, "Error\n", 6), ft_free(split, word_count(av[i], ' ')), 1);
 		}
 		ft_free(split, j);
 	}
-	// i = 0;
-	// while (i < 5)
-	// 	printf("%d  ", d->tab[i++]);
 	return (0);
 }
