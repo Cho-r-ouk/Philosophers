@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   eat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 09:37:20 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/19 16:18:50 by cmasnaou         ###   ########.fr       */
+/*   Created: 2024/05/15 10:12:46 by cmasnaou          #+#    #+#             */
+/*   Updated: 2024/05/19 16:21:00 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int main(int ac, char **av)
+int ft_eat(t_philo *p)
 {
-    t_data d = {0};
-
-    if (parse(ac, av, &d))
-        return (1);
-    if (d.tab[0] == 0)
+    p->eat_count += 1;
+    p->last_meal = ft_time();
+    if (ft_print(p, "is eating"))
         return (0);
-    if (one_philo(&d))
+    if (ft_sleep(p, p->data->tab[2]))
         return (0);
-    if (!ft_philo(&d))
-        return (1);
-    return (0);
+    pthread_mutex_unlock(&p->fork_l);
+    pthread_mutex_unlock(p->fork_r);
+    return (1);
 }

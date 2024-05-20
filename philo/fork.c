@@ -6,22 +6,22 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:38:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/04/24 11:51:35 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:28:32 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int set_fork(t_data *d)
+int ft_fork(t_data *d)
 {
     int i = 0;
     d->philo = (t_philo *)malloc(sizeof(t_philo) * (d->tab[0]));
     if (!d->philo)
-        return (write(2, "malloc error\n", 14), 0);
+        return (write(2, "malloc failed\n", 15), 0);
     while (i < d->tab[0])
     {
         if (pthread_mutex_init(&d->philo[i].fork_l, NULL))
-            return (write(2, "error creating lock\n", 21), 0);
+            return (write(2, "mutex_init failed\n", 19), 0);
         i++;
     }
     i = 0;

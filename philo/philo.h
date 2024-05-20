@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/12 15:20:52 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:21:32 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,32 @@ typedef struct s_philo
     pthread_mutex_t	fork_l;
     pthread_mutex_t	*fork_r;
     long			last_meal;
-    long	        start_time;
-    // int             is_eating;
+    int		        eat_count;
     struct s_data	*data;
 }   t_philo;
 
 typedef struct s_data
 {
     long	tab[5];
-    int		eat_count;
     int		is_dead;
-    int     start;//
-    pthread_mutex_t data_lock;
-    pthread_mutex_t print_lock;
-    pthread_mutex_t dead_lock;
-    pthread_mutex_t sleep_lock;
-    pthread_mutex_t time_lock;
+    int     start;
+    long	start_time;
+    pthread_mutex_t lock;
+    pthread_mutex_t clock;
     t_philo	*philo;
 }   t_data;
 
+
+int 	ft_print(t_philo *p, char *s);
+int     ft_sleep(t_philo * p, long t);
+void	ft_free_data(t_data *d);
+void	*ft_action(void *p0);
+void    *ft_check(void *d0);
+long	ft_time();
+int     ft_eat(t_philo *p);
+int		ft_fork(t_data *d);
+int		ft_philo(t_data *d);
+int     one_philo(t_data *d);
 
 int		word_count(char const *s, char c);
 char	**ft_free(char **p, int i);
@@ -76,13 +83,5 @@ size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t n);
 int		parse(int ac, char **av, t_data *d);
 int		ft_atoi(char *s);
-long	get_time();
-int 	set_message(t_philo *p, char *s);
-void	free_data(t_data *d);
-int     set_usleep(t_philo * p, long t);
-void	*set_action(void *p0);
-int		set_fork(t_data *d);
-int		set_philo(t_data *d);
-int     dead_check(t_philo *p);
 
 #endif

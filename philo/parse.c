@@ -6,11 +6,9 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:48 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/04/24 14:21:57 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:21:10 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//fix -0 and malloc = NULL sigfault
 
 #include "philo.h"
 
@@ -28,6 +26,8 @@ int	is_valid(char *s)
 	i = 0;
 	while (s[i])
 	{
+		if (s[i] == '-' && s[i + 1] == '0')
+			return (1);
 		if (!(s[i] >= '0' && s[i] <= '9')
 			&& s[i] != ' ' && s[i] != '+')
 			return (0);
@@ -75,6 +75,7 @@ int parse(int ac, char **av, t_data *d)
 	int		i;
     int     j;
     int     k;
+	int		n;
 	char	**split;
     
 	k = arg_count(ac, av);
@@ -88,11 +89,14 @@ int parse(int ac, char **av, t_data *d)
 			return (write (2, "Error\n", 6), 1);
 		while (split[++j])
 		{
+			n = word_count(av[i], ' ');
 			d->tab[++k] = ft_atoi(split[j]);
 			if (d->tab[0] == 0)
-				return (0);
+				return (ft_free(split, n), 0);
+			if (k == 4 && d->tab[k] == 0)//
+				return (ft_free(split, n), 1);//
 			if (d->tab[k] == 0)
-				return (write (2, "Error\n", 6), ft_free(split, word_count(av[i], ' ')), 1);
+				return (write (2, "Error\n", 6), ft_free(split, n), 1);
 		}
 		ft_free(split, j);
 	}

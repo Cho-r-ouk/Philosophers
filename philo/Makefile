@@ -6,7 +6,7 @@
 #    By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 16:40:31 by cmasnaou          #+#    #+#              #
-#    Updated: 2024/04/24 09:45:27 by cmasnaou         ###   ########.fr        #
+#    Updated: 2024/05/19 16:26:09 by cmasnaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ RM		=	rm -f
 HEADM	=	philo.h
 SRCM	=	philo.c parse.c utils.c\
 			split.c libft.c main.c\
-			action.c fork.c
+			action.c fork.c print.c\
+			eat.c 	check.c
 OBJM	=	$(SRCM:.c=.o)
 
 MAGENTA	=	\033[0;35m
