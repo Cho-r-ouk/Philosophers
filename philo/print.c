@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:04:36 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 16:19:52 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:33:42 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	ft_print(t_philo *p, char *s)
 
 int	one_philo(t_data *d)
 {
+	if (d->tab[0] == 0)
+		return (1);
 	if (d->tab[0] == 1)
 	{
 		printf("0\t1\thas taken a fork\n");
