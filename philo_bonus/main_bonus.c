@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:37:20 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/27 18:38:21 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:09:46 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	main(int ac, char **av)
 	d = (t_data){0};
 	if (parse(ac, av, &d))
 		return (1);
-	if (d.tab[0] == 0)
-		return (0);
 	if (one_philo(&d))
 		return (0);
 	if (!ft_philo(&d))

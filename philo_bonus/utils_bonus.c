@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/28 09:59:52 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:15:31 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,34 @@ int	ft_sleep(t_philo *p, long t)
 	long	time;
 
 	time = ft_time() + t;
-	sem_wait(p->data->time);
+	if (sem_wait(p->data->time) == -1)
+		return (1);
 	while (ft_time() < time)
 	{
-		if (p && p->data->is_dead)
+		if (p->data->is_dead)
 			return (ft_print(p, "is dead"));
 		usleep(10);
 	}
-	sem_post(p->data->time);
+	if (sem_post(p->data->time) == -1)
+		return (1);
 	return (0);
 }
 
-void	ft_free_data(t_data *d)
+void	ft_close(t_data *d)
 {
 	sem_close(d->lock);
 	sem_close(d->clock);
 	sem_close(d->eat);
 	sem_close(d->dead);
 	sem_close(d->meal);
+	ft_unlink();
+}
+
+void	ft_unlink(void)
+{
 	sem_unlink("/forks");
 	sem_unlink("/eat");
+	sem_unlink("/time");
 	sem_unlink("/meal");
 	sem_unlink("/dead");
 	sem_unlink("/lock");

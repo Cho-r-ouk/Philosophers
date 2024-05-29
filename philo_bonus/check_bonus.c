@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:13:36 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/28 15:10:32 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:08:34 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ void	*ft_check(void *p0)
 		{
 			if (p->data->tab[4] && p->eat_count > p->data->tab[4] && count++)
 				(count >= p->data->tab[0])
-					&& (ft_free_data(p->data), kill(p->pid, 13));
+					&& (ft_close(p->data), kill(p->pid, 13));
 			if (ft_time() - p->last_meal > p->data->tab[1])
 			{
 				p->data->is_dead = p->id;
-				sem_wait(p->data->clock);
+				if (sem_wait(p->data->clock) == -1)
+					return (NULL);
 				ft_print(p, "died");
-				(ft_free_data(p->data), kill(p->pid, 13));
+				(ft_close(p->data), kill(p->pid, 13));
 				return (sem_post(p->data->clock), NULL);
 			}
 		}

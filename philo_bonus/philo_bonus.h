@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/28 12:49:22 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:43:01 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,9 @@ int		ft_print(t_philo *p, char *s);
 int		ft_eat(t_philo *p);
 int		ft_philo(t_data *d);
 int		ft_sleep(t_philo *p, long t);
-void	ft_free_data(t_data *d);
-void	ft_action(t_philo *p);
+void	ft_close(t_data *d);
+void	ft_unlink(void);
+int		ft_action(t_philo *p);
 void	*ft_check(void *d0);
 
 #endif

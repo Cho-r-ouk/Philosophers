@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:40:55 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 17:01:48 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:25:58 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,12 @@ void	*ft_action(void *p0)
 	while (!ft_get_start(p->data))
 		usleep(1);
 	if (!(p->id % 2))
-		ft_sleep(p, p->data->tab[2] / 2);
+	{
+		if (ft_print(p, "is thinking"))
+			return (NULL);
+		if (ft_sleep(p, p->data->tab[2] / 2))
+			return (NULL);
+	}
 	while (!ft_dead(p->data))
 		if (!ft_actions(p))
 			break ;
