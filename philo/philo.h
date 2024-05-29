@@ -6,27 +6,9 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/19 16:21:32 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:19:45 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// The threads of a computer program allow the program to execute sequential actions or many actions at once.
-// The typical difference is that threads (of the same process) run in a shared memory space, while processes run in separate memory spaces.
-/* 
-Process:
-- Can have multiple threads
-- When using fork(), duplicates everything
-- This means a variable is just copied, if we modify the variable in one process it won't be modified in the other one
-
-Threads:
-- share memory space
-- if I declare a variable somewhere, and modify it inside of a thread, it will be changed for every other threads as well
-- can run in what's called a "memory race"
-- since the memory is shared between threads, if multiple threads try to access the same variable at the same time, it's called a "memory race" since the "fastest" thread will modify the variable value, and then the other one will. But the value of the first modification could have useful somewhere.
-- we have to protect our program against "memory race", like we do for "memory leaks"
-*/
-// A mutex is basically a lock. We can lock a variable so that only one thread can access the variable at a time. 
-// When the first thread finished its operation on the variable, we unlock the mutex so that the other thread can access the variable.
 
 #ifndef PHILO_H
 # define PHILO_H
@@ -38,42 +20,51 @@ Threads:
 # include <limits.h>
 # include <sys/time.h>
 
-struct s_data;
+struct	s_data;
 
 typedef struct s_philo
 {
-    int				id;
-    pthread_t		philo;
-    pthread_mutex_t	fork_l;
-    pthread_mutex_t	*fork_r;
-    long			last_meal;
-    int		        eat_count;
-    struct s_data	*data;
-}   t_philo;
+	int				id;
+	pthread_t		philo;
+	long			last_meal;
+	int				eat_count;
+	pthread_mutex_t	fork_l;
+	pthread_mutex_t	*fork_r;
+	struct s_data	*data;
+}	t_philo;
 
 typedef struct s_data
 {
-    long	tab[5];
-    int		is_dead;
-    int     start;
-    long	start_time;
-    pthread_mutex_t lock;
-    pthread_mutex_t clock;
-    t_philo	*philo;
-}   t_data;
+	long			tab[5];
+	long			start_time;
+	int				is_dead;
+	int				start;
+	int				i[5];
+	t_philo			*philo;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	check;
+	pthread_mutex_t	dead;
+	pthread_mutex_t	count;
+}	t_data;
 
-
-int 	ft_print(t_philo *p, char *s);
-int     ft_sleep(t_philo * p, long t);
-void	ft_free_data(t_data *d);
+int		ft_print(t_philo *p, char *s);
+int		ft_sleep(t_philo *p, long t);
 void	*ft_action(void *p0);
-void    *ft_check(void *d0);
-long	ft_time();
-int     ft_eat(t_philo *p);
+void	*ft_check(void *d0);
+void	ft_free_data(t_data *d);
+int		ft_set_start(t_data *d);
+int		ft_get_start(t_data *d);
+int		ft_set_meal(t_philo *p);
+long	ft_get_meal(t_philo *p);
+int		ft_set_count(t_philo *p);
+int		ft_get_count(t_philo *p);
+int		ft_dead(t_data *data);
+int		ft_destroy(t_data *d);
+long	ft_time(void);
+int		ft_eat(t_philo *p);
 int		ft_fork(t_data *d);
 int		ft_philo(t_data *d);
-int     one_philo(t_data *d);
-
+int		one_philo(t_data *d);
 int		word_count(char const *s, char c);
 char	**ft_free(char **p, int i);
 char	**ft_split(char const *s, char c);

@@ -6,18 +6,18 @@
 #    By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 16:40:31 by cmasnaou          #+#    #+#              #
-#    Updated: 2024/05/21 09:16:35 by cmasnaou         ###   ########.fr        #
+#    Updated: 2024/05/27 18:36:58 by cmasnaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo_bonus
-CC		=	cc -g -fsanitize=address
+CC		=	cc #-g -fsanitize=thread
 FLAGS	=	-Wall -Wextra -Werror -pthread
 RM		=	rm -f
 HEADM	=	philo.h
 SRCM	=	philo_bonus.c parse_bonus.c utils_bonus.c\
 			split_bonus.c libft_bonus.c main_bonus.c\
-			action_bonus.c fork_bonus.c print_bonus.c\
+			action_bonus.c print_bonus.c\
 			eat_bonus.c 	check_bonus.c
 OBJM	=	$(SRCM:.c=.o)
 

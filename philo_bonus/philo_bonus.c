@@ -6,78 +6,66 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/23 20:27:40 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:42:56 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-static int ft_init(t_philo *p)
+static int	ft_init_fork(t_data *d)
 {
-    p->eat_count = 0;
-    p->philo = fork();
-    p->last_meal = p->data->start_time; 
-    if (p->philo == -1)
-        return (write(2, "error creating process\n", 24), 0);
-    return (1);
+	sem_unlink("/forks");
+	sem_unlink("/eat");
+	sem_unlink("/time");
+	sem_unlink("/meal");
+	sem_unlink("/dead");
+	sem_unlink("/lock");
+	sem_unlink("/clock");
+	d->forks = sem_open("/forks", O_CREAT, 0644, d->tab[0]);
+	d->eat = sem_open("/eat", O_CREAT, 0644, 1);
+	d->time = sem_open("/time", O_CREAT, 0644, 1);
+	d->meal = sem_open("/meal", O_CREAT, 0644, 1);
+	d->dead = sem_open("/dead", O_CREAT, 0644, 1);
+	d->lock = sem_open("/lock", O_CREAT, 0644, 1);
+	d->clock = sem_open("/clock", O_CREAT, 0644, 1);
+	d->start = 0;
+	d->is_dead = 0;
+	d->start_time = ft_time();
+	return (1);
 }
 
-int ft_philo(t_data *d)
+static int	ft_init_philo(t_data *d)
 {
-    int i;
-    pid_t pid;
-    pthread_t check;
+	int	i;
 
-    // d = (t_data *)malloc(sizeof(t_data));
-    if (!ft_fork(d))
-        return (0);
-    /******************************/
-    sem_unlink("lock");
-    sem_unlink("clock");
-    d->lock = sem_open("/lock", O_CREAT, 0644, 1);
-    d->clock = sem_open("/clock", O_CREAT, 0644, 1);
-    // pthread_mutex_init(&d->clock, NULL);
-    // pthread_mutex_init(&d->lock, NULL);
-    /******************************/
-  
-    if (pthread_create(&check, NULL, &ft_check, d))
-        return (write(2, "error creating thread\n", 23), 0);
-    if (pthread_join(check, NULL))
-        return (write(2, "error joining thread\n", 22), 0);
-  
-    d->is_dead = 0;
-    d->start = 0;
-    i = -1;
-    // pid = fork();
-    // if (pid == -1)
-    //     return (write(2, "error creating process\n", 24), 0);
-    // if (pid == 0)
-    // {
-        i = -1;
-        while (++i < d->tab[0])
-        {
-            d->philo[i].id = i + 1;
-            d->philo[i].data = d;
-            if (!ft_init(&d->philo[i]))
-                return (0);        
-            if (i == 0)
-                d->start_time = ft_time();
-            if (d->philo[i].philo == 0)
-            {
-                // if ((d->philo[i].philo % 2) == 0)
-                //     sleep(1);
-                while (1)
-                    ft_action(d, i);
-            }
-        }
-    // }
-    // else
-     i = -1;
-    while (++i < d->tab[0])
-        waitpid(d->philo[i].philo, NULL, 0);
-        // wait(NULL);
-    ft_free_data(d);
-    sem_close(d->lock);
-    sem_close(d->clock);
-    return (1);
+	i = -1;
+	while (++i < d->tab[0])
+	{
+		d->philo.id = i + 1;
+		d->philo.data = d;
+		d->philo.eat_count = 0;
+		d->philo.pid = fork();
+		if (d->philo.pid == -1)
+			return (write(2, "error creating process\n", 24), kill(d->philo.pid, 13), 0);//free all
+		d->philo.last_meal = d->start_time;
+		if (d->philo.pid == 0)
+			ft_action(&d->philo);
+	}
+	waitpid(-1, 0, 0);
+	return (1);
+}
+
+int	ft_philo(t_data *d)
+{
+	if (!ft_init_fork(d))
+		return (0);
+	if (!ft_init_philo(d))
+		return (0);
+	ft_free_data(d);
+	sem_close(d->lock);
+	sem_close(d->clock);
+	sem_close(d->eat);
+	sem_close(d->dead);
+	sem_close(d->meal);
+	return (1);
 }

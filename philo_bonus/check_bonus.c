@@ -6,34 +6,36 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:13:36 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/22 13:55:18 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:10:32 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void *ft_check(void *d0)
+void	*ft_check(void *p0)
 {
-    t_data *d;
-    int i;
+	static int	count;
+	t_philo		*p;
+	int			i;
 
-    d = (t_data *)d0;
-    while (!d->is_dead)
-    {
-        i = -1;
-        while ((++i < d->tab[0]) && !d->is_dead)
-        {
-            if (ft_time() - d->philo[i].last_meal > d->tab[1])
-            {
-                // pthread_mutex_lock(&d->clock);
-                sem_wait(d->clock);
-                d->is_dead = d->philo[i].id;
-                // pthread_mutex_unlock(&d->clock);
-                sem_post(d->clock);
-                return (NULL);
-            }
-        }
-    }
-    return (NULL);
-
+	p = (t_philo *)p0;
+	while (!p->data->is_dead)
+	{
+		i = -1;
+		while (++i < p->data->tab[0])
+		{
+			if (p->data->tab[4] && p->eat_count > p->data->tab[4] && count++)
+				(count >= p->data->tab[0])
+					&& (ft_free_data(p->data), kill(p->pid, 13));
+			if (ft_time() - p->last_meal > p->data->tab[1])
+			{
+				p->data->is_dead = p->id;
+				sem_wait(p->data->clock);
+				ft_print(p, "died");
+				(ft_free_data(p->data), kill(p->pid, 13));
+				return (sem_post(p->data->clock), NULL);
+			}
+		}
+	}
+	return (NULL);
 }

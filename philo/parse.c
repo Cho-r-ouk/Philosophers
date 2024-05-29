@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:48 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/19 16:21:10 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:39:37 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,35 +70,31 @@ int	arg_count(int ac, char **av)
 	return (k);
 }
 
-int parse(int ac, char **av, t_data *d)
+int	parse(int ac, char **av, t_data *d)
 {
-	int		i;
-    int     j;
-    int     k;
-	int		n;
 	char	**split;
-    
-	k = arg_count(ac, av);
-    if (k < 4 || k > 5)
-        return (write (2, "Error\n", 6), 1);
-	(i = 0, k = -1, d->tab[4] = 0);
-	while (++i < ac)
+
+	d->i[2] = arg_count(ac, av);
+	if (d->i[2] < 4 || d->i[2] > 5)
+		return (write (2, "Error\n", 6), 1);
+	(1) && (d->i[0] = 0, d->i[3] = -1, d->tab[4] = 0);
+	while (++d->i[0] < ac)
 	{
-		(split = ft_split(av[i], ' '), j = -1);
+		(1) && (split = ft_split(av[d->i[0]], ' '), d->i[1] = -1);
 		if (!split)
 			return (write (2, "Error\n", 6), 1);
-		while (split[++j])
+		while (split[++d->i[1]])
 		{
-			n = word_count(av[i], ' ');
-			d->tab[++k] = ft_atoi(split[j]);
+			d->i[4] = word_count(av[d->i[0]], ' ');
+			d->tab[++d->i[3]] = ft_atoi(split[d->i[1]]);
 			if (d->tab[0] == 0)
-				return (ft_free(split, n), 0);
-			if (k == 4 && d->tab[k] == 0)//
-				return (ft_free(split, n), 1);//
-			if (d->tab[k] == 0)
-				return (write (2, "Error\n", 6), ft_free(split, n), 1);
+				return (ft_free(split, d->i[4]), 0);
+			if (d->i[3] == 4 && d->tab[d->i[3]] == 0)
+				return (ft_free(split, d->i[4]), 1);
+			if (d->tab[d->i[3]] == 0)
+				return (write (2, "Error\n", 6), ft_free(split, d->i[4]), 1);
 		}
-		ft_free(split, j);
+		ft_free(split, d->i[1]);
 	}
 	return (0);
 }
