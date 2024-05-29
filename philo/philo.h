@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 16:19:45 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:55:58 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int		ft_set_count(t_philo *p);
 int		ft_get_count(t_philo *p);
 int		ft_dead(t_data *data);
 int		ft_destroy(t_data *d);
+int		ft_malloc(t_data *d);
 long	ft_time(void);
 int		ft_eat(t_philo *p);
 int		ft_fork(t_data *d);

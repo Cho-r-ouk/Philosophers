@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 16:20:30 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:55:52 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,21 @@ void	ft_free_data(t_data *d)
 		pthread_mutex_destroy(&d->philo[i].fork_l);
 		i++;
 	}
+}
+
+int	ft_malloc(t_data *d)
+{
+	d->philo = (t_philo *)malloc(sizeof(t_philo) * (d->tab[0]));
+	if (!d->philo)
+		return (0);
+	return (1);
+}
+
+int	ft_destroy(t_data *d)
+{
+	pthread_mutex_destroy(&d->lock);
+	pthread_mutex_destroy(&d->check);
+	pthread_mutex_destroy(&d->dead);
+	pthread_mutex_destroy(&d->count);
+	return (1);
 }

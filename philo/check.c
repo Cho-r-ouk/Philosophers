@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 10:13:36 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 16:18:23 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:30:20 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void	*ft_check(void *d0)
 		{
 			if (ft_time() - ft_get_meal(&d->philo[i]) > d->tab[1])
 			{
-				pthread_mutex_lock(&d->dead);
+				if (pthread_mutex_lock(&d->dead))
+					return (NULL);
 				d->is_dead = d->philo[i].id;
-				pthread_mutex_unlock(&d->dead);
+				if (pthread_mutex_unlock(&d->dead))
+					return (NULL);
 				return (NULL);
 			}
 		}

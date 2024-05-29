@@ -6,12 +6,12 @@
 #    By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 16:40:31 by cmasnaou          #+#    #+#              #
-#    Updated: 2024/05/29 16:19:15 by cmasnaou         ###   ########.fr        #
+#    Updated: 2024/05/29 16:52:55 by cmasnaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
-CC		=	cc -g -fsanitize=thread
+CC		=	cc
 FLAGS	=	-Wall -Wextra -Werror -pthread
 RM		=	rm -f
 HEADM	=	philo.h
