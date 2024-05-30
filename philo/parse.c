@@ -6,11 +6,27 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:48 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 21:27:05 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/30 10:32:22 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	is_zero(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (s[i] == '-' || s[i] == '+' || s[i] == '0')
+	{
+		while (s[++i])
+			if (s[i] != '0')
+				return (0);
+	}
+	else
+		return (0);
+	return (1);
+}
 
 int	is_valid(char *s)
 {
@@ -26,7 +42,7 @@ int	is_valid(char *s)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == '-' && s[i + 1] == '0')
+		if (is_zero(s))
 			return (1);
 		if (!(s[i] >= '0' && s[i] <= '9')
 			&& s[i] != ' ' && s[i] != '+')
