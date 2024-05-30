@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:40:16 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/29 20:25:15 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/30 08:33:13 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ static int	ft_init(t_data *d)
 int	ft_philo(t_data *d)
 {
 	if (!ft_open(d))
-		return (0);
+		return (ft_close(d), 0);
 	if (!ft_init(d))
-		return (0);
+		return (ft_close(d), 0);
 	ft_close(d);
 	return (1);
 }
