@@ -6,7 +6,7 @@
 #    By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 16:40:31 by cmasnaou          #+#    #+#              #
-#    Updated: 2024/05/30 08:32:23 by cmasnaou         ###   ########.fr        #
+#    Updated: 2024/05/30 10:20:34 by cmasnaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME	=	philo_bonus
 CC		=	cc
 FLAGS	=	-Wall -Wextra -Werror -pthread
 RM		=	rm -f
-HEADM	=	philo.h
+HEADB	=	philo_bonus.h
 SRCM	=	philo_bonus.c parse_bonus.c utils_bonus.c\
 			split_bonus.c libft_bonus.c main_bonus.c\
 			action_bonus.c print_bonus.c\
@@ -30,7 +30,7 @@ all:	$(NAME)
 $(NAME):$(OBJM)
 		$(CC) $(FLAGS) $(OBJM) -o $(NAME)
 		echo "🌸 ${CYAN}Done! 🌸 ${NC}use ${MAGENTA}./philo_bonus 5 800 200 200 7🌸"
-%.o:%.c	$(HEADM) Makefile
+%.o:%.c	$(HEADB) Makefile
 		$(CC) $(FLAGS) -c $< -o $@
 bonus:	all
 clean:
