@@ -6,7 +6,7 @@
 /*   By: cmasnaou <cmasnaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:40:55 by cmasnaou          #+#    #+#             */
-/*   Updated: 2024/05/30 08:30:08 by cmasnaou         ###   ########.fr       */
+/*   Updated: 2024/05/30 10:21:49 by cmasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	ft_actions(t_philo *p)
 
 int	ft_action(t_philo *p)
 {
-	int	j;
-
 	if (pthread_create(&p->data->check, NULL, &ft_check, p))
 		return (0);
 	if (pthread_detach(p->data->check))
